@@ -48,13 +48,13 @@ me = true;
 
 //unknown Similar to any, but TypeScript forces you to check the type before using it.
 
-let value : unknown = "hello";
-if(typeof value === "string"){
+let value: unknown = "hello";
+if (typeof value === "string") {
   console.log(value.toUpperCase()); // Allowed because we checked the type
 }
 
 //void Used for functions that don’t return a value.
 
-function sayHello(): void{
-    console.log("hi i am omer");
+function sayHello(): void {
+  console.log("hi i am omer");
 }
