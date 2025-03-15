@@ -142,3 +142,78 @@ function printData():void{
   console.log("Hello TypeScript!",date)
 }
 printData();
+
+//unknown 
+// when we don't now any type we use unknown we can also assign any to it but unknown is safe option for it .
+
+
+//In TypeScript, any and unknown are both used to represent values of any type, but they have key differences in terms of 
+// safety and usage:
+
+/*
+any (Unsafe, No Type Checking)
+The any type disables type checking completely.
+You can perform any operation on an any type without TypeScript errors.
+This can lead to runtime errors because TypeScript won't warn you about incorrect operations.
+
+let value: any;
+
+value = "Hello";
+console.log(value.toUpperCase()); // ✅ Works
+
+value = 10;
+console.log(value.toFixed(2)); // ✅ Works
+
+value = true;
+console.log(value.trim()); // ❌ No TypeScript error, but runtime error!
+
+
+TypeScript allows invalid operations (like true.trim()), leading to potential runtime crashes.
+
+ unknown (Safer, Requires Type Checking)
+The unknown type is safer than any because you must check the type before using it.
+You cannot perform operations on an unknown type without narrowing its type first.
+
+let value: unknown;
+
+value = "Hello";
+if (typeof value === "string") {
+  console.log(value.toUpperCase()); // ✅ Safe
+}
+
+value = 10;
+if (typeof value === "number") {
+  console.log(value.toFixed(2)); // ✅ Safe
+}
+
+value = true;
+console.log(value.trim()); // ❌ TypeScript Error: Property 'trim' does not exist on type 'unknown'.
+
+Feature	       any (Unsafe)	                                                    unknown (Safe)
+Type Checking	 ❌ No checks	                                                    ✅ Requires type checks
+Operations	   ✅ Allowed on any type	                                        ❌ Must check type first
+Safety	      ❌ Unsafe (Runtime Errors)	                                        ✅ Safer (Compile-time Checks)
+Best          Use Case	When migrating JavaScript to TypeScript (temporary use)  	When handling unknown API responses or dynamic data
+*/
+
+// let dataOfunknown : any;
+// dataOfunknown = 10;
+// dataOfunknown = "10";
+
+// let item : string;
+
+// item = dataOfunknown
+
+// no error
+
+let dataOfunknown : unknown;
+dataOfunknown = 10;
+dataOfunknown = "10";
+
+let item : string;
+
+if(typeof dataOfunknown === "string"){
+  item = dataOfunknown
+}
+
+//item = dataOfunknown to do this we need if condition for it 
