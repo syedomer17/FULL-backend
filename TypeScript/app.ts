@@ -58,3 +58,14 @@ if (typeof value === "string") {
 function sayHello(): void {
   console.log("hi i am omer");
 }
+
+// There are three types of data types Number String Boolean 
+
+const num : Number = 123;
+const Name : String = "Syed Omer Ali";
+const isAlive : Boolean = true;
+
+function sum(a:number,b:number):void{
+  console.log(a + b);
+}
+sum(10,20)
