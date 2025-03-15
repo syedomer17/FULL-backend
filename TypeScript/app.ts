@@ -69,3 +69,24 @@ function sum(a:number,b:number):void{
   console.log(a + b);
 }
 sum(10,20)
+
+let data : undefined = undefined;
+let nlllal : null = null
+
+const person : {name:string,age:number,email:string} = {
+  name  : "syed omer ali",
+  age: 18,
+  email : "syedomerali2006@gmail.com"
+}
+console.log(person.name)
+
+type obj = {name:string,age:number,email:string}
+
+const user : obj = {
+  name:"omer",
+  age:19,
+  email:"omerali.code@gmail.com"
+}
+
+// what is array ?
+//array is the collection of the values 

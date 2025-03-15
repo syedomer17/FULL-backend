@@ -52,3 +52,18 @@ function sum(a, b) {
     console.log(a + b);
 }
 sum(10, 20);
+var data = undefined;
+var nlllal = null;
+var person = {
+    name: "syed omer ali",
+    age: 18,
+    email: "syedomerali2006@gmail.com"
+};
+console.log(person.name);
+var user = {
+    name: "omer",
+    age: 19,
+    email: "omerali.code@gmail.com"
+};
+// what is array ?
+//array is the collection of the values 
