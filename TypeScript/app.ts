@@ -101,3 +101,6 @@ enum Role {
   admin,superAdmin,user
 }
 console.log(Role)
+
+let de : any = 10;
+de = "hello"
