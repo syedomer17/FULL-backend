@@ -192,6 +192,7 @@ var newPerson = /** @class */ (function () {
     newPerson.prototype.greet = function () {
         console.log("Hello i am ".concat(this.name, " and my age is ").concat(this.age));
     };
+    console.log(newPerson)
     return newPerson;
 }());
 var person1 = new newPerson("omer", 18);
