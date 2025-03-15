@@ -67,3 +67,13 @@ var user = {
 };
 // what is array ?
 //array is the collection of the values 
+var arra = ["syed", "omer", "ali"];
+//tupels 
+var role = ["omer", 18];
+var Role;
+(function (Role) {
+    Role[Role["admin"] = 0] = "admin";
+    Role[Role["superAdmin"] = 1] = "superAdmin";
+    Role[Role["user"] = 2] = "user";
+})(Role || (Role = {}));
+console.log(Role);

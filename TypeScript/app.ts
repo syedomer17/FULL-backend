@@ -96,3 +96,8 @@ let arra : string[] = ["syed","omer","ali"]
 //tupels 
 
 let role : [string,number] = ["omer",18]
+
+enum Role {
+  admin,superAdmin,user
+}
+console.log(Role)
