@@ -59,95 +59,100 @@ function sayHello(): void {
   console.log("hi i am omer");
 }
 
-// There are three types of data types Number String Boolean 
+// There are three types of data types Number String Boolean
 
-const num : Number = 123;
-const Name : String = "Syed Omer Ali";
-const isAlive : Boolean = true;
+const num: Number = 123;
+const Name: String = "Syed Omer Ali";
+const isAlive: Boolean = true;
 
-function sum(a:number,b:number):void{
+function sum(a: number, b: number): void {
   console.log(a + b);
 }
-sum(10,20)
+sum(10, 20);
 
-let data : undefined = undefined;
-let nlllal : null = null
+let data: undefined = undefined;
+let nlllal: null = null;
 
-const person : {name:string,age:number,email:string} = {
-  name  : "syed omer ali",
+const person: { name: string; age: number; email: string } = {
+  name: "syed omer ali",
   age: 18,
-  email : "syedomerali2006@gmail.com"
-}
-console.log(person.name)
+  email: "syedomerali2006@gmail.com",
+};
+console.log(person.name);
 
-type obj = {name:string,age:number,email:string}
+type obj = { name: string; age: number; email: string };
 
-const user : obj = {
-  name:"omer",
-  age:19,
-  email:"omerali.code@gmail.com"
-}
+const user: obj = {
+  name: "omer",
+  age: 19,
+  email: "omerali.code@gmail.com",
+};
 
 // what is array ?
-//array is the collection of the values 
+//array is the collection of the values
 
-let arra : string[] = ["syed","omer","ali"]
+let arra: string[] = ["syed", "omer", "ali"];
 
-//tupels 
+//tupels
 
-let role : [string,number] = ["omer",18]
+let role: [string, number] = ["omer", 18];
 
 enum Role {
-  admin,superAdmin,user
+  admin,
+  superAdmin,
+  user,
 }
-console.log(Role)
+console.log(Role);
 
-let de : any = 10;
-de = "hello"
+let de: any = 10;
+de = "hello";
 
-function combin(a:number | string , b : number | string){
-  if( typeof a === "number" && typeof b === "number"){
-    return a + b
-  }else {
-   return a.toString() + b.toString();
+function combin(a: number | string, b: number | string) {
+  if (typeof a === "number" && typeof b === "number") {
+    return a + b;
+  } else {
+    return a.toString() + b.toString();
   }
 }
-console.log(combin(10,20))
-console.log(combin("Syed","omer"))
+console.log(combin(10, 20));
+console.log(combin("Syed", "omer"));
 
-//literal 
+//literal
 
-function com(a:number | string , b : number | string, type: "as-number" | "as-string"){
-  if( type === "as-number"){
-    return (+a) + (+b)
-  }else {
-   return a.toString() + b.toString();
+function com(
+  a: number | string,
+  b: number | string,
+  type: "as-number" | "as-string"
+) {
+  if (type === "as-number") {
+    return +a + +b;
+  } else {
+    return a.toString() + b.toString();
   }
 }
-console.log(com(10,20,"as-number"))
-console.log(com("Syed","omer","as-string"))
+console.log(com(10, 20, "as-number"));
+console.log(com("Syed", "omer", "as-string"));
 
 // alias
 
-type variableType = string | number | undefined
-let a : variableType = 10;
-let b : variableType = "Hi"
-let c : variableType = undefined
+type variableType = string | number | undefined;
+let a: variableType = 10;
+let b: variableType = "Hi";
+let c: variableType = undefined;
 
-console.log(a,b,c)
+console.log(a, b, c);
 
 //void
-function printData():void{
-  let date = new Date()
-  console.log("Hello TypeScript!",date)
+function printData(): void {
+  let date = new Date();
+  console.log("Hello TypeScript!", date);
 }
 printData();
 
-//unknown 
+//unknown
 // when we don't now any type we use unknown we can also assign any to it but unknown is safe option for it .
 
-
-//In TypeScript, any and unknown are both used to represent values of any type, but they have key differences in terms of 
+//In TypeScript, any and unknown are both used to represent values of any type, but they have key differences in terms of
 // safety and usage:
 
 /*
@@ -206,23 +211,49 @@ Best          Use Case	When migrating JavaScript to TypeScript (temporary use)  
 
 // no error
 
-let dataOfunknown : unknown;
+let dataOfunknown: unknown;
 dataOfunknown = 10;
 dataOfunknown = "10";
 
-let item : string;
+let item: string;
 
-if(typeof dataOfunknown === "string"){
-  //item = dataOfunknown to do this we need if condition for it 
-  item = dataOfunknown
+if (typeof dataOfunknown === "string") {
+  //item = dataOfunknown to do this we need if condition for it
+  item = dataOfunknown;
 }
 
 //never
-
 
 function apiError(msg: string, code: number): never {
   throw { message: msg, apiError: code }; // Throwing an error object
 }
 
 console.log(apiError("server side error", 500)); // This will crash the program
+
+//How include and exclude a file?
+/*
+go to tsconfig.json add this lines at last
+"exclude":["fileName"]//this file will do gnore and it will does't complied 
+*/
+
+// class
+
+class newPerson {
+  name:string;
+  age:number;
+
+  constructor(name:string,age:number){
+    this.name = name;
+    this.age = age;
+  }
+  greet():void{
+    console.log(`Hello i am ${this.name} and my age is ${this.age}`)
+  }
+}
+const person1 = new newPerson("omer",18);
+person1.greet()
+
+//Properties (name, age): Variables that store data.
+//Constructor (constructor(name, age)): Special method that runs when an object is created.
+//Method (greet()): A function inside a class.
 

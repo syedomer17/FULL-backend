@@ -44,7 +44,7 @@ if (typeof value === "string") {
 function sayHello() {
     console.log("hi i am omer");
 }
-// There are three types of data types Number String Boolean 
+// There are three types of data types Number String Boolean
 var num = 123;
 var Name = "Syed Omer Ali";
 var isAlive = true;
@@ -57,18 +57,18 @@ var nlllal = null;
 var person = {
     name: "syed omer ali",
     age: 18,
-    email: "syedomerali2006@gmail.com"
+    email: "syedomerali2006@gmail.com",
 };
 console.log(person.name);
 var user = {
     name: "omer",
     age: 19,
-    email: "omerali.code@gmail.com"
+    email: "omerali.code@gmail.com",
 };
 // what is array ?
-//array is the collection of the values 
+//array is the collection of the values
 var arra = ["syed", "omer", "ali"];
-//tupels 
+//tupels
 var role = ["omer", 18];
 var Role;
 (function (Role) {
@@ -89,10 +89,10 @@ function combin(a, b) {
 }
 console.log(combin(10, 20));
 console.log(combin("Syed", "omer"));
-//literal 
+//literal
 function com(a, b, type) {
     if (type === "as-number") {
-        return (+a) + (+b);
+        return +a + +b;
     }
     else {
         return a.toString() + b.toString();
@@ -110,9 +110,9 @@ function printData() {
     console.log("Hello TypeScript!", date);
 }
 printData();
-//unknown 
+//unknown
 // when we don't now any type we use unknown we can also assign any to it but unknown is safe option for it .
-//In TypeScript, any and unknown are both used to represent values of any type, but they have key differences in terms of 
+//In TypeScript, any and unknown are both used to represent values of any type, but they have key differences in terms of
 // safety and usage:
 /*
 any (Unsafe, No Type Checking)
@@ -155,7 +155,7 @@ console.log(value.trim()); // ❌ TypeScript Error: Property 'trim' does not exi
 
 Feature	       any (Unsafe)	                                                    unknown (Safe)
 Type Checking	 ❌ No checks	                                                    ✅ Requires type checks
-Operations	   ✅ Allowed on any type	                                        ❌ Must check type first
+Operations	   ✅ Allowed on any type	                                          ❌ Must check type first
 Safety	      ❌ Unsafe (Runtime Errors)	                                        ✅ Safer (Compile-time Checks)
 Best          Use Case	When migrating JavaScript to TypeScript (temporary use)  	When handling unknown API responses or dynamic data
 */
@@ -170,7 +170,7 @@ dataOfunknown = 10;
 dataOfunknown = "10";
 var item;
 if (typeof dataOfunknown === "string") {
-    //item = dataOfunknown to do this we need if condition for it 
+    //item = dataOfunknown to do this we need if condition for it
     item = dataOfunknown;
 }
 //never
@@ -178,3 +178,25 @@ function apiError(msg, code) {
     throw { message: msg, apiError: code }; // Throwing an error object
 }
 console.log(apiError("server side error", 500)); // This will crash the program
+//How include and exclude a file?
+/*
+go to tsconfig.json add this lines at last
+"exclude":["fileName"]//this file will do gnore and it will does't complied
+*/
+// class
+var newPerson = /** @class */ (function () {
+    function newPerson(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    newPerson.prototype.greet = function () {
+        console.log("Hello i am ".concat(this.name, " and my age is ").concat(this.age));
+    };
+    return newPerson;
+}());
+var person1 = new newPerson("omer", 18);
+person1.greet();
+console.log(person1)
+//Properties (name, age): Variables that store data.
+//Constructor (constructor(name, age)): Special method that runs when an object is created.
+//Method (greet()): A function inside a class.
