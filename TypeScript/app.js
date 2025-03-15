@@ -77,3 +77,26 @@ var Role;
     Role[Role["user"] = 2] = "user";
 })(Role || (Role = {}));
 console.log(Role);
+var de = 10;
+de = "hello";
+function combin(a, b) {
+    if (typeof a === "number" && typeof b === "number") {
+        return a + b;
+    }
+    else {
+        return a.toString() + b.toString();
+    }
+}
+console.log(combin(10, 20));
+console.log(combin("Syed", "omer"));
+//literal 
+function com(a, b, type) {
+    if (type === "as-number") {
+        return (+a) + (+b);
+    }
+    else {
+        return a.toString() + b.toString();
+    }
+}
+console.log(com(10, 20, "as-number"));
+console.log(com("Syed", "omer", "as-string"));
