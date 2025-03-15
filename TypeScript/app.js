@@ -100,3 +100,7 @@ function com(a, b, type) {
 }
 console.log(com(10, 20, "as-number"));
 console.log(com("Syed", "omer", "as-string"));
+var a = 10;
+var b = "Hi";
+var c = undefined;
+console.log(a, b, c);

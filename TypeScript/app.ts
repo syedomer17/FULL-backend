@@ -126,3 +126,12 @@ function com(a:number | string , b : number | string, type: "as-number" | "as-st
 }
 console.log(com(10,20,"as-number"))
 console.log(com("Syed","omer","as-string"))
+
+// alias
+
+type variableType = string | number | undefined
+let a : variableType = 10;
+let b : variableType = "Hi"
+let c : variableType = undefined
+
+console.log(a,b,c)
