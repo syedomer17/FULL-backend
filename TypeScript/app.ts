@@ -191,7 +191,7 @@ console.log(value.trim()); // ❌ TypeScript Error: Property 'trim' does not exi
 
 Feature	       any (Unsafe)	                                                    unknown (Safe)
 Type Checking	 ❌ No checks	                                                    ✅ Requires type checks
-Operations	   ✅ Allowed on any type	                                        ❌ Must check type first
+Operations	   ✅ Allowed on any type	                                          ❌ Must check type first
 Safety	      ❌ Unsafe (Runtime Errors)	                                        ✅ Safer (Compile-time Checks)
 Best          Use Case	When migrating JavaScript to TypeScript (temporary use)  	When handling unknown API responses or dynamic data
 */
@@ -213,7 +213,16 @@ dataOfunknown = "10";
 let item : string;
 
 if(typeof dataOfunknown === "string"){
+  //item = dataOfunknown to do this we need if condition for it 
   item = dataOfunknown
 }
 
-//item = dataOfunknown to do this we need if condition for it 
+//never
+
+
+function apiError(msg: string, code: number): never {
+  throw { message: msg, apiError: code }; // Throwing an error object
+}
+
+console.log(apiError("server side error", 500)); // This will crash the program
+

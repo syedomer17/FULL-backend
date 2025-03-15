@@ -170,7 +170,11 @@ dataOfunknown = 10;
 dataOfunknown = "10";
 var item;
 if (typeof dataOfunknown === "string") {
+    //item = dataOfunknown to do this we need if condition for it 
     item = dataOfunknown;
 }
-console.log(item)
-//item = dataOfunknown to do this we need if condition for it 
+//never
+function apiError(msg, code) {
+    throw { message: msg, apiError: code }; // Throwing an error object
+}
+console.log(apiError("server side error", 500)); // This will crash the program
