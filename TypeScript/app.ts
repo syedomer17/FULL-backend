@@ -135,3 +135,10 @@ let b : variableType = "Hi"
 let c : variableType = undefined
 
 console.log(a,b,c)
+
+//void
+function printData():void{
+  let date = new Date()
+  console.log("Hello TypeScript!",date)
+}
+printData();

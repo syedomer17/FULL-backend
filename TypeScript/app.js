@@ -104,3 +104,9 @@ var a = 10;
 var b = "Hi";
 var c = undefined;
 console.log(a, b, c);
+//void
+function printData() {
+    var date = new Date();
+    console.log("Hello TypeScript!", date);
+}
+printData();
