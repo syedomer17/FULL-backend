@@ -90,3 +90,9 @@ const user : obj = {
 
 // what is array ?
 //array is the collection of the values 
+
+let arra : string[] = ["syed","omer","ali"]
+
+//tupels 
+
+let role : [string,number] = ["omer",18]
