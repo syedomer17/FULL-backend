@@ -1,0 +1,46 @@
+session storage : 
+
+Imagine you have a secret diary 📖, but you can only read it while you're inside your room.
+
+When you enter the room (open the website), you get a magic notebook (session storage) where you can write things down.
+You can write (store) important things like your favorite color, your name, or a secret number.
+As long as you stay inside the room (keep the browser open), you can check (read) or change (update) your notebook.
+But the moment you leave the room (close the browser), the notebook disappears forever.
+So, session storage is like a temporary memory that stores data only while you're visiting a website.
+
+In Node.js + Express.js, we use session storage to remember things about the user while they are on the site, like:
+✅ If they are logged in
+✅ What their cart items are (if it's a shopping site)
+✅ Their preferences (like dark mode)
+
+Feature	           Session Storage	                     Local Storage	                          Cookies
+Data Persistence	Until tab/browser is closed	         Stays until manually cleared	          Can have expiration time
+Data Capacity	  ~5MB	                                 ~10MB	                                  ~4KB (smallest)
+Access Scope	   Per tab/session	                      Across all tabs/windows	               Sent with every request to the server
+Accessibility	   Only in JavaScript (client-side)	Only  in JavaScript (client-side)	           Accessible by both client and server
+Security	       More secure (not sent to the server)	   More secure (not sent to the server)	    Less secure (sent with every request)
+Use Case	       Temporary data (e.g., form inputs)	    Persistent settings, themes	            Authentication tokens, session tracking
+
+
+When to Use What?
+Session Storage → Temporary user data (e.g., form drafts, UI states).
+Local Storage → Persistent settings (e.g., dark mode, saved preferences).
+Cookies → Authentication (e.g., JWT tokens, session management).
+
+
+cookies:
+
+Imagine you go to your favorite ice cream shop. The shopkeeper gives you a "magic token" (cookie 🍪) that remembers your favorite ice cream flavor.
+
+Every time you come back, you show the token.
+The shopkeeper remembers you and gives you the same ice cream without asking again!
+If you lose the token, the shopkeeper forgets your favorite ice cream.
+In websites, cookies work the same way!
+
+When you log in, the website gives you a cookie.
+Every time you visit, your browser sends the cookie to the website.
+The website remembers you!
+
+Cookies store small data in the browser.
+They help websites remember users (like login info or preferences).
+We can set, get, and delete cookies using Express.js and TypeScript.
