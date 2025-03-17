@@ -3,57 +3,36 @@ import config from "config";
 import bcrypt from "bcrypt";
 import userModel from "../../models/User/User";
 import sendEmail from "../../utils/sendEmail";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 
 const router: Router = express.Router();
 const JWT_SECRET: string = config.get<string>("JWT_SECRET");
 const URL: string = config.get<string>("SERVER_URL");
 
-// ✅ Signup Route
+const app = express();
+app.use(cookieParser());
+
+/* ✅ SIGNUP ROUTE */
 router.post("/signup", async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log("Received Data:", req.body); // 🛠 Debugging log
-
-    // ✅ Extract Data
     const { userName, age, email, password, fitnessGoal, fitnessLevel, subscriptionStatus } = req.body;
+    console.log(userName, age, email, password, fitnessGoal, fitnessLevel, subscriptionStatus);
 
-    // ✅ Input Validations
     if (!email || !userName || !password || !age || !fitnessGoal || !fitnessLevel || !subscriptionStatus) {
-      console.log("❌ Missing Fields:", req.body);
       res.status(400).json({ message: "All fields are required" });
       return;
     }
 
-    if (userName.length > 20 || userName.length < 2) {
-      res.status(400).json({ message: "Username must be between 2 and 20 characters." });
-      return;
-    }
-    
-    if (age > 70 || age < 10) {
-      res.status(400).json({ message: "Age must be between 10 and 70." });
-      return;
-    }
-
-    // ✅ Check if email already exists
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
       res.status(400).json({ message: "Email already exists" });
       return;
     }
 
-    // ✅ Check if username already exists
-    const dupUserName = await userModel.findOne({ userName });
-    if (dupUserName) {
-      res.status(400).json({ message: "Username already exists" });
-      return;
-    }
-
-    // ✅ Hash Password
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const emailToken = Math.random().toString(36).substring(2);
 
-    // ✅ Create New User (Removed `userVerifiedToken`)
     const newUser = await userModel.create({
       userName,
       age,
@@ -62,23 +41,13 @@ router.post("/signup", async (req: Request, res: Response): Promise<void> => {
       fitnessGoal,
       fitnessLevel,
       subscriptionStatus,
-      userVerifiedToken: {
-        email: emailToken
-      },
-    });
-
-    await userModel.create(newUser);
-
-    res.status(201).json({
-      message: "✅ User registered successfully",
-      userId: newUser._id
+      userVerifiedToken: { email: emailToken },
     });
 
     await sendEmail({
       subject: "Email Verification",
       to: email,
-      html: `
-      <!DOCTYPE html>
+      html: `<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -154,22 +123,22 @@ router.post("/signup", async (req: Request, res: Response): Promise<void> => {
   </body>
 </html>`,
     });
-    console.log(`${URL}/api/public/emailverify/${emailToken}`);
-
+    
+    res.status(201).json({ message: "User registered. Please verify your email." });
   } catch (error) {
-    console.error("❌ Signup Error:", error instanceof Error ? error.message : error);
-    res.status(500).json({ message: "❌ Internal Server Error" });
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// ✅ Sign-in Route
+/* ✅ SIGNIN ROUTE (Stores JWT in Cookies) */
 router.post("/signin", async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
-
     const user = await userModel.findOne({ email });
-    if (!user) {
-      res.status(400).json({ message: "Invalid Credentials" });
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      res.status(400).json({ message: "Invalid credentials" });
       return;
     }
 
@@ -178,74 +147,55 @@ router.post("/signin", async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      res.status(400).json({ message: "Invalid credentials" });
-      return;
-    }
-
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
-
-    res.status(200).json({
-      message: "User Logged In Successfully",
-      token,
-      id: user._id,
-      email,
-      userVerified: user.userVerified,
+    console.log(token)
+    // Set cookie with token
+    res.cookie("token", token, {
+      httpOnly: true, // Prevents client-side access (for security)
+      secure: true, // Ensure it's HTTPS in production
+      sameSite: "strict",// Prevents CSRF attacks
+      maxAge: 3600000, // 1 hour
     });
+    const userId = await userModel.findOne({ _id: user._id });
+    console.log(user,userId)
+    
+    res.status(200).json({ message: "User Logged In Successfully" , token ,userId});
   } catch (error) {
-    console.error(
-      "❌ Signin Error:",
-      error instanceof Error ? error.message : error
-    );
+    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// ✅ Email Verification Route
-router.get(
-  "/emailverify/:token",
-  async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { token } = req.params;
-
-      const user = await userModel.findOne({
-        "userVerifiedToken.email": token,
-      });
-      if (!user) {
-        res.status(400).json({ message: "Invalid verification token" });
-        return;
-      }
-
-      user.userVerified.email = true;
-      user.userVerifiedToken!.email = undefined; // ✅ Fix for null issue
-      await user.save();
-
-      res.status(200).json({ message: "Email Verified successfully" });
-    } catch (error) {
-      console.error(
-        "❌ Email Verification Error:",
-        error instanceof Error ? error.message : error
-      );
-      res.status(500).json({ message: "Internal Server Error" });
-    }
-  }
-);
-
-// ✅ Password Reset Route
-router.post("/resetpassword", async (req: Request, res: Response): Promise<void> => {
+/* ✅ EMAIL VERIFICATION */
+router.get("/emailverify/:token", async (req: Request, res: Response): Promise<void> => {
   try {
-    const { email } = req.body;
-    if (!email){
-       res.status(400).json({ message: "Please provide an email." });
+    const { token } = req.params;
+    const user = await userModel.findOne({ "userVerifiedToken.email": token });
+
+    if (!user) {
+      res.status(400).json({ message: "Invalid verification token" });
       return;
     }
 
+    user.userVerified.email = true;
+    user.userVerifiedToken!.email = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Email verified successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+/* ✅ PASSWORD RESET */
+router.post("/resetpassword", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email } = req.body;
     const user = await userModel.findOne({ email });
-    if (!user){
-       res
-        .status(400)
-        .json({ message: "User not found. Please register." });
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
       return;
     }
 
@@ -254,34 +204,64 @@ router.post("/resetpassword", async (req: Request, res: Response): Promise<void>
     await user.save();
 
     await sendEmail({
+      subject: "Password Reset",
       to: email,
-      subject: "Password Reset Request",
-      html: `<p>Your new password is: <strong>${newPassword}</strong></p>`,
+      html: `<p>Your new password: <strong>${newPassword}</strong></p>`,
     });
 
-    res.status(200).json({ message: "New password sent to your email." });
+    res.status(200).json({ message: "New password sent to your email" });
   } catch (error) {
-    console.error(
-      "❌ Password Reset Error:",
-      error instanceof Error ? error.message : error
-    );
+    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// ✅ Send Workout Plan Route
+/* ✅ CHECK AUTH (Using Cookie) */
+router.get("/check-auth", (req: Request, res: Response): void => {
+  try {
+    const token =
+      req.cookies.token || // Check token in cookies
+      req.headers.authorization?.split(" ")[1]; // Check token in Authorization header
+
+      console.log("Received Token:", token);
+
+    if (!token) {
+      res.status(401).json({ message: "Unauthorized: No token provided" });
+      return;
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+
+    if (!decoded.id) {
+      res.status(401).json({ message: "Invalid Token: Missing user ID" });
+      return;
+    }
+
+    res.status(200).json({ message: "User is authenticated", userId: decoded.id });
+  } catch (error) {
+    res.status(401).json({ message: "Invalid Token" });
+  }
+});
+
+
+/* ✅ LOGOUT (Clears Cookie) */
+router.post("/logout", (req: Request, res: Response) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "Logged out successfully" });
+});
+
+/* ✅ SEND WORKOUT PLAN */
 router.post("/sendplan", async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, plan } = req.body;
-    if (!email || !plan) {
-       res.status(400).json({ message: "Plan data is required" });
-       return;
+
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
     }
 
-    let formattedPlan = plan
-      .split("\n")
-      .map((line: string) => `<p>${line}</p>`) // ✅ Fixed 'any' type
-      .join("");
+    let formattedPlan = plan.split("\n").map((line: string) => `<p>${line}</p>`).join("");
 
     await sendEmail({
       to: email,
@@ -289,15 +269,11 @@ router.post("/sendplan", async (req: Request, res: Response): Promise<void> => {
       html: `<div><h2>Your Workout Plan</h2>${formattedPlan}</div>`,
     });
 
-    res.status(200).json({ message: "Plan sent successfully!" });
+    res.status(200).json({ message: "Workout plan sent successfully" });
   } catch (error) {
-    console.error(
-      "❌ Send Plan Error:",
-      error instanceof Error ? error.message : error
-    );
+    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// ✅ Export Router
 export default router;

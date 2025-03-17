@@ -44,3 +44,34 @@ The website remembers you!
 Cookies store small data in the browser.
 They help websites remember users (like login info or preferences).
 We can set, get, and delete cookies using Express.js and TypeScript.
+
+❌ What Cookies Can’t Do
+They expire (some last for a few minutes, some for years).
+They are small (only a few KB of data).
+They are not very secure (hackers can steal them if not protected).
+Cookies help websites remember you, but they don’t store too much data. If a website needs to save a lot of information, it uses local storage or databases instead.
+
+localStorage:
+
+Now, let's say you have a small notebook 📒 inside your backpack where you can write down important things, like:
+
+Your name 🏷️
+Your favorite game 🎮
+Your best friend’s name 👦
+This notebook inside your backpack is like local storage in your web browser! 🖥️
+
+📝 How Local Storage Works
+1️⃣ When a website needs to remember something, it writes it in the "notebook" (local storage).
+2️⃣ Even if you close your browser or turn off your computer, the "notebook" still keeps the information.
+3️⃣ The next time you open the website, it can read from the "notebook" and remember your details.
+
+🎯 Example: A Game Saving Your High Score
+You play an online car racing game 🏎️
+You score 5000 points 🎯
+The game saves your score in local storage
+Even if you close your browser and come back tomorrow, your score is still there!
+
+❌ What Local Storage Can’t Do
+It only works on your browser, not on other computers.
+It can’t store sensitive information (like passwords).
+It doesn’t delete itself unless you clear it manually or write code to remove it.
