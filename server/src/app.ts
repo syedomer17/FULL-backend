@@ -8,6 +8,7 @@ import userRouter from "./controllers/User/index";
 import adminRouter from "./controllers/Admin/index"
 import "./utils/dbConnect"
 
+
 const app = express();
 const PORT: number = config.get<number>("PORT") || 5000; // ✅ Ensure it's a number
 
