@@ -7,14 +7,16 @@ import authMiddleware from "./controllers/middleware/auth";
 import userRouter from "./controllers/User/index";
 import adminRouter from "./controllers/Admin/index"
 import "./utils/dbConnect"
-
+import githubAuthRoutes from "./controllers/GitHubOauth/index"
 
 const app = express();
 const PORT: number = config.get<number>("PORT") || 5000; // ✅ Ensure it's a number
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173"], // ✅ Allow React frontend
+    methods: ["GET", "POST","PUT","DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -30,6 +32,7 @@ const globalLimiter = rateLimit({
 app.use(globalLimiter);
 
 app.use("/api/public", publicRouter);
+app.use("/auth", githubAuthRoutes);
 
 // ✅ **Private Routes Pe Middleware**
 app.use(authMiddleware);
